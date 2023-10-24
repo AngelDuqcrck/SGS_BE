@@ -7,5 +7,5 @@ import com.sistema.solicitudes.sgs.entities.EstadoSolicitud;
 
 @Repository
 public interface EstadoSolicitudRepository extends JpaRepository<EstadoSolicitud, Integer> {
-    
+    EstadoSolicitud findByNombre(String nombre);
 }
