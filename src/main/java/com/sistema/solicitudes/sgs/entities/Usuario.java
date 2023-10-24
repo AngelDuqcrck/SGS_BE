@@ -28,7 +28,6 @@ public class Usuario  {
     private String apellido;
 
     @NotEmpty
-    @UniqueElements
     private String email;
 
     private String encryptedPassword;
@@ -36,5 +35,10 @@ public class Usuario  {
     @ManyToOne
     @JoinColumn(name = "rol_id") 
     private Rol rol;
+
+
+    @ManyToOne
+    @JoinColumn(name = "dependencia_id") 
+    private Dependencia dependencia;
 
 }

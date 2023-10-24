@@ -18,6 +18,9 @@ public class Ticket {
     @Column(nullable = false, length = 200)
     private String nombre;
 
+    @Column(length = 255)
+    private String observacion;
+
     @Column(name = "fecha_inicio")
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
