@@ -1,6 +1,7 @@
 package com.sistema.solicitudes.sgs.entities;
 import javax.persistence.*;
 import lombok.*;
+import java.util.*;
 
 @Getter
 @Setter
@@ -17,4 +18,6 @@ public class EstadoSolicitud {
 
     @Column(name = "nombre", length = 50)
     private String nombre;
+
+   
 }

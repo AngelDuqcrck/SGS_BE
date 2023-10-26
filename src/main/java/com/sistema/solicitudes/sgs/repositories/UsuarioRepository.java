@@ -5,7 +5,11 @@ import org.springframework.stereotype.Repository;
 
 import com.sistema.solicitudes.sgs.entities.Usuario;
 
+import java.util.Optional;
+
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
-    
+
+    Optional<Usuario> findByEmail(String email);
+
 }

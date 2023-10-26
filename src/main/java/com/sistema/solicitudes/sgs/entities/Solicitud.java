@@ -15,6 +15,9 @@ public class Solicitud {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "titulo", length = 50)
+    private String titulo;
+
     @Column(name = "descripcion", length = 255)
     private String descripcion;
 

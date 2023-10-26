@@ -10,11 +10,11 @@ import lombok.*;
 
 
 
-@Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Entity
 @Table (name = "usuarios")
 public class Usuario  {
 

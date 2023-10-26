@@ -4,8 +4,11 @@ import javax.persistence.*;
 
 import lombok.*;
 
-@Getter
-@Setter@Entity
+@Data
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "dependencias")
 public class Dependencia {
     
