@@ -15,43 +15,42 @@ import com.sistema.solicitudes.sgs.shared.dto.SolicitudDTO;
 @Service("solicitudService")
 public class SolicitudService {
 
-     @Autowired
+    @Autowired
     private SolicitudRepository solicitudRepository;
-
+    
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    
     @Autowired
     private EstadoSolicitudRepository estadoSolicitudRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    public SolicitudDTO crearSolicitud(SolicitudDTO solicitudDTO) {
+    public SolicitudDTO crearSolicitud(SolicitudDTO solicitudDTO, Integer usuarioId) {
         Solicitud solicitud = new Solicitud();
+        
         BeanUtils.copyProperties(solicitudDTO, solicitud);
-
-        // Obtén el usuario que está creando la solicitud
-        Usuario usuario = usuarioRepository.findById(solicitudDTO.getUsuarioId()).orElse(null);
         
+        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
         if (usuario == null) {
-            throw new IllegalArgumentException("No se encontró el usuario");
+
+            throw new IllegalArgumentException("Usuario no encontrado") ;
         }
         
-        // Establece la fecha de solicitud como la fecha y hora actuales
-        solicitud.setFechaSolicitud(new Date());
-
-        // Obtén el estado "PENDIENTE" para la solicitud
-        EstadoSolicitud estado = estadoSolicitudRepository.findByNombre("PENDIENTE");
-
-        if (estado == null) {
-            throw new IllegalArgumentException("No se encontró el estado de solicitud PENDIENTE ");
-        }
-
-        solicitud.setEstado(estado);
         solicitud.setUsuario(usuario);
-
+        
+        EstadoSolicitud estado = estadoSolicitudRepository.findByNombre("PENDIENTE").orElse(null);
+        
+        if (estado == null) {
+            throw new IllegalArgumentException("Estado pendiente no encontrado");
+        }
+        
+        solicitud.setEstado(estado);
+        solicitud.setFechaSolicitud(new Date());
+        
         Solicitud solicitudGuardada = solicitudRepository.save(solicitud);
-        SolicitudDTO solicitudCreadaDTO = new SolicitudDTO();
-        BeanUtils.copyProperties(solicitudGuardada, solicitudCreadaDTO);
-
-        return solicitudCreadaDTO;
+        
+        SolicitudDTO solicitudCreada = new SolicitudDTO();
+        BeanUtils.copyProperties(solicitudGuardada, solicitudCreada);
+        
+        return solicitudCreada;
     }
 }

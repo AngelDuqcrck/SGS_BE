@@ -7,10 +7,10 @@ CREATE TABLE IF NOT EXISTS roles (
 );
 -- Insertar roles por defecto en la tabla roles si aún no existen
 INSERT IGNORE INTO roles (id,descripcion) VALUES
-    (1,"ROLE_ADMIN"),
+    (1,"ROLE_JEFE_SERVICIO"),
     (2,"ROLE_EMPLEADO"),
     (3,"ROLE_JEFE"),
-    (4,"ROLE_EMPLEADO_SERVICE");
+    (4,"ROLE_EMPLEADO_SERVICIO");
 
 -- Crear la tabla dependencias si no existe
 CREATE TABLE IF NOT EXISTS dependencias (
@@ -29,26 +29,26 @@ INSERT IGNORE INTO dependencias (id, nombre) VALUES
 (5, "SERVICIOS");
 
 -- Crear la tabla estadoSolicitudes si no existe
-CREATE TABLE IF NOT EXISTS estadoSolicitudes (
+CREATE TABLE IF NOT EXISTS estado_solicitudes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL
 );
 
 -- Insertar algunos estados por defecto en estadoSolicitudes
-INSERT IGNORE INTO estadoSolicitudes (id, nombre) VALUES
+INSERT IGNORE INTO estado_solicitudes (id, nombre) VALUES
     (1,"PENDIENTE"),
     (2,"VERIFICADA"),
     (3,"APROBADA"),
     (4,"RECHAZADA");
 
 -- Crear la tabla estadoTickets si no existe
-CREATE TABLE IF NOT EXISTS estadoTickets (
+CREATE TABLE IF NOT EXISTS estado_tickets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL
 );
 
 -- Insertar algunos estados por defecto en estadoTickets
-INSERT IGNORE INTO estadoTickets (id, nombre) VALUES
+INSERT IGNORE INTO estado_tickets (id, nombre) VALUES
     (1, "ASIGNADO"),
     (2, "EN EJECUCION"),
     (3, "FINALIZADO");

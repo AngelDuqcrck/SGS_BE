@@ -9,6 +9,8 @@ public class SolicitudDTO {
     
     private Integer id;
 
+    private String titulo;
+    
     private String descripcion;
 
     private Date fechaSolicitud;
