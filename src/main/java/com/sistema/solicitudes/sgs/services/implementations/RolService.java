@@ -29,8 +29,7 @@ public class RolService {
         if (rol == null) {
             return null;
         }
-        
-        BeanUtils.copyProperties(rolDTO, rol);
+        rol.setDescripcion(rolDTO.getDescripcion());
 
         Rol rolActualizado = rolRepository.save(rol);
 
