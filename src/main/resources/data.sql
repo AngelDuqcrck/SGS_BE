@@ -39,7 +39,9 @@ INSERT IGNORE INTO estado_solicitudes (id, nombre) VALUES
     (1,"PENDIENTE"),
     (2,"VERIFICADA"),
     (3,"APROBADA"),
-    (4,"RECHAZADA");
+    (4,"RECHAZADA"),
+    (5, "ENVIADA"),
+    (6, "CANCELADA");
 
 -- Crear la tabla estadoTickets si no existe
 CREATE TABLE IF NOT EXISTS estado_tickets (
