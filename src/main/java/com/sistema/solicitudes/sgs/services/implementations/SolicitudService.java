@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.sistema.solicitudes.sgs.entities.EstadoSolicitud;
 import com.sistema.solicitudes.sgs.entities.Solicitud;
@@ -184,6 +185,21 @@ public class SolicitudService {
 
             requestRepository.delete(request);
         
+    }
+
+    public List<SolicitudDTO> getAllRequest(Integer idDependence){
+        return requestRepository.findAll().stream().filter(
+                solicitud -> solicitud.getUsuario().getDependencia().getId() == idDependence
+        ).map( solicitud ->  {
+            return new SolicitudDTO().builder()
+                    .id(solicitud.getId())
+                    .titulo(solicitud.getTitulo())
+                    .descripcion(solicitud.getDescripcion())
+                    .fechaSolicitud(solicitud.getFechaSolicitud())
+                    .estadoId(solicitud.getEstado().getId())
+                    .usuarioId(solicitud.getUsuario().getId())
+                    .build();
+        } ).collect(Collectors.toList());
     }
 
 }

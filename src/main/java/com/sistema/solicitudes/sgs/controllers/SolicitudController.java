@@ -3,10 +3,12 @@ package com.sistema.solicitudes.sgs.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sistema.solicitudes.sgs.entities.Solicitud;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -105,6 +107,12 @@ public class SolicitudController {
         }
 
         return response;
+    }
+
+    @PreAuthorize("hasRole('ROLE_JEFE')")
+    @GetMapping("/allRequestPerDependence")
+    public List<SolicitudDTO> getAllRequestPerDependence(@RequestParam Integer idDependence ){
+        return requestService.getAllRequest(idDependence);
     }
 
 }

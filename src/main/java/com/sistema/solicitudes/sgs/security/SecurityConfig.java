@@ -35,6 +35,8 @@ public class SecurityConfig {
     @Autowired
     JwtAuthorizationFilter authorizationFilter;
 
+    private final String[] PUBLIC_URL  = {"**"};
+
     /**
      * We create this bean because Springboot needs manage the instance on the SpringContext.
      * You can personalize this method includes all the security config as wel.
@@ -54,7 +56,7 @@ public class SecurityConfig {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .authorizeRequests(auth -> {
-                    auth.requestMatchers().permitAll(); //input all the endpoints its free por the user.
+                    auth.antMatchers(PUBLIC_URL).permitAll(); //input all the endpoints its free por the user.
                     auth.anyRequest().authenticated();
                 })
                 .addFilter(jwtAuthenticationFilter)
