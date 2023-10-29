@@ -1,12 +1,10 @@
 package com.sistema.solicitudes.sgs.security.filters;
 
 import com.sistema.solicitudes.sgs.security.UserServiceDetailsImpl;
-import com.sistema.solicitudes.sgs.security.constants.SecurityConstant;
 import com.sistema.solicitudes.sgs.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 

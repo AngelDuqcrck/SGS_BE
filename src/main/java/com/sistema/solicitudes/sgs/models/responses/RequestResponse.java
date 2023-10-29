@@ -1,14 +1,13 @@
 package com.sistema.solicitudes.sgs.models.responses;
 
-import java.util.Date;
-
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class RequestResponse {
-    
-    
-    private String titulo;
-    
-    private Date fechaSolicitud;
+
+    private String title;
+    private Date requestDate;
+
 }

@@ -11,17 +11,18 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SolicitudDTO {
+public class RequestDTO {
     
     private Integer id;
 
-    private String titulo;
+    private String title;
     
-    private String descripcion;
+    private String description;
 
-    private Date fechaSolicitud;
+    private Date requestDate;
     // Usamos el ID del estado en lugar de la referencia al objeto EstadoSolicitud
-    private Integer estadoId;
+    private Integer statusId;
     // Usamos el ID del usuario en lugar de la referencia al objeto Usuario
-    private Integer usuarioId; 
+    private Integer userId;
+
 }

@@ -1,20 +1,25 @@
 package com.sistema.solicitudes.sgs.entities;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "estadoTickets")
-public class EstadoTicket {
+@Table(name = "status_tickets")
+public class StatusTicket {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "nombre", length = 50)
-    private String nombre;
+    @Column(name = "description", length = 50)
+    private String description;
 }

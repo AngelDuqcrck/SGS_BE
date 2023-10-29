@@ -1,9 +1,12 @@
 package com.sistema.solicitudes.sgs.entities;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 
 @Entity
@@ -20,5 +23,5 @@ public class Rol {
 
     @Column(nullable = false, length = 40)
     @NotEmpty
-    private String descripcion;
+    private String description;
 }
