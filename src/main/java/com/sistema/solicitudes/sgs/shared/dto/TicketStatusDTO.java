@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RolDTO {
-
+public class TicketStatusDTO {
+    
     private Integer id;
     private String description;
-    
+
 }

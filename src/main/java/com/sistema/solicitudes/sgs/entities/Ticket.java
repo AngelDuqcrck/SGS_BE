@@ -1,7 +1,12 @@
 package com.sistema.solicitudes.sgs.entities;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.*;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -16,28 +21,28 @@ public class Ticket {
     private Integer id;
 
     @Column(nullable = false, length = 200)
-    private String nombre;
+    private String description;
 
     @Column(length = 255)
-    private String observacion;
+    private String observation;
 
-    @Column(name = "fecha_inicio")
+    @Column(name = "start_date")
     @Temporal(TemporalType.DATE)
-    private Date fechaInicio;
+    private Date startDate;
 
-    @Column(name = "fecha_final")
+    @Column(name = "end_date")
     @Temporal(TemporalType.DATE)
-    private Date fechaFinal;
+    private Date endDate;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario empleado;
+    @JoinColumn(name = "user_id")
+    private User employee;
 
-    @Column(name = "fecha_asig")
+    @Column(name = "assignment_date")
     @Temporal(TemporalType.DATE)
-    private Date fechaAsignacion;
+    private Date assignmentDate;
 
     @ManyToOne
-    @JoinColumn(name = "estado_id")
-    private EstadoTicket estado;
+    @JoinColumn(name = "status_id")
+    private StatusTicket statusTicket;
 }

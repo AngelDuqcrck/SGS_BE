@@ -1,12 +1,13 @@
 package com.sistema.solicitudes.sgs.entities;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-
-import org.hibernate.validator.constraints.UniqueElements;
-
-import lombok.*;
 
 
 
@@ -15,22 +16,22 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table (name = "usuarios")
-public class Usuario  {
+@Table (name = "user")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotEmpty
-    private String nombre;
+    private String firstName;
     @NotEmpty
-    private String apellido;
+    private String lastName;
 
     @NotEmpty
     private String email;
 
-    private String encryptedPassword;
+    private String password;
 
     @ManyToOne
     @JoinColumn(name = "rol_id") 
@@ -38,7 +39,7 @@ public class Usuario  {
 
 
     @ManyToOne
-    @JoinColumn(name = "dependencia_id") 
-    private Dependencia dependencia;
+    @JoinColumn(name = "dependence_id")
+    private Dependence dependence;
 
 }

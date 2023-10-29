@@ -1,15 +1,14 @@
 package com.sistema.solicitudes.sgs.repositories;
 
+import com.sistema.solicitudes.sgs.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.sistema.solicitudes.sgs.entities.Usuario;
 
 import java.util.Optional;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    Optional<Usuario> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
 }
