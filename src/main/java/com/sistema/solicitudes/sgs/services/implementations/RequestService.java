@@ -37,7 +37,7 @@ public class RequestService {
      * and saves it in the database.
      *
      * @param requestDTO The request data to be created.
-     * @param userId    The ID of the user creating the request.
+     * @param userId     The ID of the user creating the request.
      * @return The created request as a DTO.
      * @throws IllegalArgumentException if the user does not exist or if the
      *                                  "STAND_BY" status is not found.
@@ -50,7 +50,6 @@ public class RequestService {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null)
             throw new IllegalArgumentException("User not found");
-
 
         request.setUser(user);
 
@@ -148,13 +147,13 @@ public class RequestService {
 
     /**
      * This method updates the title and description of a request if the request is
-     * in "PENDIENTE" status (the request can't be in "ENVIADO" status).
+     * in "STAND_BY" status (the request can't be in "SENT" status).
      *
      * @param requestDTO The updated request data.
      * @param requestId  The ID of the request to update.
      * @return The updated request as a DTO.
      * @throws IllegalArgumentException if the request is not found or if it's not
-     *                                  in "PENDIENTE" status.
+     *                                  in "STAND_BY" status.
      */
     public RequestDTO updateRequest(RequestDTO requestDTO, Integer requestId) {
 
@@ -176,6 +175,13 @@ public class RequestService {
         return UpdatedRequestDTO;
     }
 
+    /**
+     * Deletes a request based on its ID if it's in "STAND_BY" status.
+     *
+     * @param requestId The ID of the request to be deleted.
+     * @throws IllegalArgumentException if the request is not found or not in
+     *                                  "STAND_BY" status.
+     */
     public void deleteRequest(Integer requestId) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new IllegalArgumentException("Request not found"));
@@ -184,23 +190,28 @@ public class RequestService {
             throw new IllegalArgumentException("You can't delete this request because it isn't in STAND_BY status.");
         }
 
-            requestRepository.delete(request);
-        
+        requestRepository.delete(request);
+
     }
 
-    public List<RequestDTO> getAllRequest(Integer idDependence){
+    /**
+     * Retrieves all requests for a given dependence based on its ID.
+     *
+     * @param idDependence The ID of the dependence.
+     * @return A list of request DTOs belonging to the specified dependence.
+     */
+    public List<RequestDTO> getAllRequest(Integer idDependence) {
         return requestRepository.findAll().stream().filter(
-                request -> request.getUser().getDependence().getId() == idDependence
-        ).map(request ->  {
-            return new RequestDTO().builder()
-                    .id(request.getId())
-                    .title(request.getTitle())
-                    .description(request.getDescription())
-                    .requestDate(request.getRequestDate())
-                    .statusId(request.getStatusRequest().getId())
-                    .userId(request.getUser().getId())
-                    .build();
-        } ).collect(Collectors.toList());
+                request -> request.getUser().getDependence().getId() == idDependence).map(request -> {
+                    return new RequestDTO().builder()
+                            .id(request.getId())
+                            .title(request.getTitle())
+                            .description(request.getDescription())
+                            .requestDate(request.getRequestDate())
+                            .statusId(request.getStatusRequest().getId())
+                            .userId(request.getUser().getId())
+                            .build();
+                }).collect(Collectors.toList());
     }
 
 }

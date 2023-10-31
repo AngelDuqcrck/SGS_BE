@@ -19,17 +19,33 @@ public class RequestController {
     @Autowired
     RequestService requestService;
 
+    /**
+     * Endpoint that creates a new request based on the provided request data for a
+     * specific user.
+     *
+     * @param solicitudDTO The request data.
+     * @param usuarioId    The ID of the user associated with the request.
+     * @return A response indicating whether the request was created successfully.
+     */
     @PostMapping("/create")
     public Response createRequest(@RequestBody RequestDTO solicitudDTO, @RequestParam Integer usuarioId) {
         Response response = new Response();
 
         RequestDTO newRequest = requestService.createRequest(solicitudDTO, usuarioId);
 
-        if (newRequest != null) response.setMessage("Request created successful");
-        else response.setMessage("Unexpected error while request was created");
+        if (newRequest != null)
+            response.setMessage("Request created successful");
+        else
+            response.setMessage("Unexpected error while request was created");
         return response;
     }
 
+    /**
+     * Endpoint that retrieves a list of requests associated with a specific user.
+     *
+     * @param userId The ID of the user to retrieve requests for.
+     * @return A list of request responses.
+     */
     @GetMapping("/user")
     public List<RequestResponse> listRequestsPerUser(@RequestParam Integer userId) {
         List<RequestResponse> requestsReturn = new ArrayList<>();
@@ -43,22 +59,42 @@ public class RequestController {
         return requestsReturn;
     }
 
+    /**
+     * Endpoint that gets details of a specific request by its ID.
+     *
+     * @param requestId The ID of the request to retrieve details for.
+     * @return The request details.
+     */
     @GetMapping
     public RequestDTO lookRequestDetails(@RequestParam Integer requestId) {
         return requestService.lookRequestDetails(requestId);
     }
 
+    /**
+     * Endpoint that updates the details of a specific request.
+     *
+     * @param requestId  The ID of the request to update.
+     * @param requestDTO The updated request data.
+     * @return A response indicating whether the request was updated successfully.
+     */
     @PostMapping("/update")
     public Response updateRequest(@RequestParam Integer requestId, @RequestBody RequestDTO requestDTO) {
         Response response = new Response();
         RequestDTO updatedRequest = requestService.updateRequest(requestDTO, requestId);
         if (updatedRequest != null)
             response.setMessage("Request updated successfully");
-        else response.setMessage("Error updating the request");
+        else
+            response.setMessage("Error updating the request");
 
         return response;
     }
 
+    /**
+     * Send a request, changing its state to "SENT".
+     *
+     * @param requestId The ID of the request to send.
+     * @return A response indicating whether the request was sent successfully.
+     */
     @PostMapping("/send")
     public Response sendRequest(@RequestParam Integer requestId) {
         Response response = new Response();
@@ -72,6 +108,12 @@ public class RequestController {
         return response;
     }
 
+    /**
+     * Endpoint that cancels a request, changing its state to "CANCELLED".
+     *
+     * @param requestId The ID of the request to cancel.
+     * @return A response indicating whether the request was canceled successfully.
+     */
     @PostMapping("/cancel")
     public Response cancelRequest(@RequestParam Integer requestId) {
         Response response = new Response();
@@ -85,6 +127,12 @@ public class RequestController {
         return response;
     }
 
+    /**
+     * Endpoint that deletes a request if it is in "STAND_BY" status.
+     *
+     * @param requestId The ID of the request to delete.
+     * @return A response indicating whether the request was deleted successfully.
+     */
     @DeleteMapping("/delete")
     public Response deleteRequest(@RequestParam Integer requestId) {
         Response response = new Response();
@@ -98,6 +146,13 @@ public class RequestController {
         return response;
     }
 
+    /**
+     * Endpoint that retrieves all requests associated with a specific dependence. Accessible by
+     * users with the role "ROLE_JEFE."
+     *
+     * @param idDependence The ID of the dependence to retrieve requests for.
+     * @return A list of requests associated with the specified dependence.
+     */
     @PreAuthorize("hasRole('ROLE_JEFE')")
     @GetMapping("/allRequestPerDependence")
     public List<RequestDTO> getAllRequestPerDependence(@RequestParam Integer idDependence) {

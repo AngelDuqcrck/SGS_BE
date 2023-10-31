@@ -16,14 +16,22 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Endpoint that permits to register a new user based on the provided user data.
+     *
+     * @param userDTO The user data to create a new user.
+     * @return A response indicating whether the user was created successfully.
+     */
     @PostMapping
     public Response registerUser(@RequestBody UserDTO userDTO) {
         Response message = new Response();
 
         UserDTO createdUser = userService.registerUsers(userDTO);
 
-        if (createdUser != null) message.setMessage("User created successfully");
-        else message.setMessage("Unexpected error while user was created");
+        if (createdUser != null)
+            message.setMessage("User created successfully");
+        else
+            message.setMessage("Unexpected error while user was created");
 
         return message;
     }

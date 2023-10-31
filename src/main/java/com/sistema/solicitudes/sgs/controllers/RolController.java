@@ -16,11 +16,23 @@ public class RolController {
     @Autowired
     private RolService rolService;
 
+    /**
+     * Endpoint that retrieves a list of roles.
+     *
+     * @return A list of role data transfer objects (DTOs).
+     */
     @GetMapping
     public List<RolDTO> listRoles() {
         return rolService.listRoles();
     }
 
+    /**
+     * Endpoint that updates the details of a specific role.
+     *
+     * @param rolId  The ID of the role to update.
+     * @param rolDTO The updated role data.
+     * @return A response indicating whether the role was updated successfully.
+     */
     @PutMapping
     public Response updateRol(@RequestParam Integer rolId, @RequestBody RolDTO rolDTO) {
         Response message = new Response();

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -23,6 +23,16 @@ public class UserService {
     @Autowired
     private DependenceRepository dependenceRepository;
 
+    /**
+     * Registers a new user based on the provided user data. It associates the user
+     * with a specific role
+     * and dependence, and saves the user in the system.
+     *
+     * @param userDTO The user data for registration.
+     * @return The newly registered user as a DTO.
+     * @throws IllegalArgumentException if the associated role or dependence is not
+     *                                  found.
+     */
     public UserDTO registerUsers(UserDTO userDTO) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
@@ -30,9 +40,10 @@ public class UserService {
         Rol rol = rolRepository.findById(userDTO.getRolId()).orElse(null);
         Dependence dependence = dependenceRepository.findById(userDTO.getDependenceId()).orElse(null);
 
-
-        if (rol == null) throw new IllegalArgumentException("Rol not found");
-        if (dependence == null) throw new IllegalArgumentException("Dependence not found");
+        if (rol == null)
+            throw new IllegalArgumentException("Rol not found");
+        if (dependence == null)
+            throw new IllegalArgumentException("Dependence not found");
 
         user.setRol(rol);
         user.setDependence(dependence);
