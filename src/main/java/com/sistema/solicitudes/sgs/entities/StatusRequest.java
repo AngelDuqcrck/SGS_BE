@@ -14,12 +14,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "status_request")
 public class StatusRequest {
-    
+    //This is the code identifier of each status that is a request currently
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
+    //This is the name of each status could be a request
     @Column(name = "description", length = 50)
     private String description;
 

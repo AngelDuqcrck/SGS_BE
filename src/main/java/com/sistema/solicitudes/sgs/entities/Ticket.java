@@ -15,33 +15,40 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name= "tickets")
 public class Ticket {
-    
+    //This is the code identifier for each ticket 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    //This is all the information about a ticket
     @Column(nullable = false, length = 200)
     private String description;
 
+    //Here, the service employee could write comments about the ticket
     @Column(length = 255)
     private String observation;
 
+    //Here, we save the date when a ticket was created/opened
     @Column(name = "start_date")
     @Temporal(TemporalType.DATE)
     private Date startDate;
 
+    //Here, we save the date when a ticket was closed/finished
     @Column(name = "end_date")
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
+    //Here we save the id to identify the employee who have to solve the problem whereby the request was made
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User employee;
 
+    //Here we saved the date, when the ticket was assigned to a service employee
     @Column(name = "assignment_date")
     @Temporal(TemporalType.DATE)
     private Date assignmentDate;
 
+    //Here we saved the status, that ticket is currently
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusTicket statusTicket;
