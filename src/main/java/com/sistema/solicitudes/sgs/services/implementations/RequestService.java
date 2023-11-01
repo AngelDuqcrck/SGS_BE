@@ -126,23 +126,55 @@ public class RequestService {
         StatusRequest newStatus = statusRequestRepository.findById(newRequestStateId)
                 .orElseThrow(() -> new IllegalArgumentException("Status Request not found"));
 
-        if (newRequestStateId == 5) {
-            if (!request.getStatusRequest().getDescription().equals("STAND_BY")) {
-                throw new IllegalArgumentException("You can't send the request because it isn't in STAND_BY status.");
-            }
-            request.setStatusRequest(newStatus);
-        }
+        switch (newRequestStateId) {
 
-        if (newRequestStateId == 6) {
-            if (!request.getStatusRequest().getDescription().equals("SENT")) {
-                throw new IllegalArgumentException(
-                        "You can't cancel the request because it isn't in SENT status.");
-            }
-            request.setStatusRequest(newStatus);
-            request.setStatusRequest(statusRequestRepository.findById(1).get());
-        }
+            case 2:
+                if (!request.getStatusRequest().getDescription().equals("SENT")) {
+                    throw new IllegalArgumentException(
+                            "You can't verify the request because it isn't in SENT status.");
+                }
+                break;
 
+            case 3:
+                if (!request.getStatusRequest().getDescription().equals("VERIFIED")) {
+                    throw new IllegalArgumentException(
+                            "You can't approve the request because it isn't in VERIFIED status.");
+                }
+                break;
+
+            case 4:
+                if (!request.getStatusRequest().getDescription().equals("VERIFIED")) {
+                    if (!request.getStatusRequest().getDescription().equals("SENT")) {
+                        throw new IllegalArgumentException(
+                            "You can't reject the request because it is neither VERIFIED nor SENT status.");
+                    }  
+                }
+                break;
+
+            case 5:
+                if (!request.getStatusRequest().getDescription().equals("STAND_BY")) {
+                    throw new IllegalArgumentException(
+                            "You can't send the request because it isn't in STAND_BY status.");
+                }
+                break;
+
+            case 6:
+                if (!request.getStatusRequest().getDescription().equals("SENT")) {
+                    throw new IllegalArgumentException(
+                            "You can't cancel the request because it isn't in SENT status.");
+                }
+                break;
+
+            default:
+            throw new IllegalArgumentException("Something is wrong with states");
+                
+        }
+        request.setStatusRequest(newStatus);
         requestRepository.save(request);
+    }
+
+    public void checkStatus(Integer requestStateId) {
+
     }
 
     /**

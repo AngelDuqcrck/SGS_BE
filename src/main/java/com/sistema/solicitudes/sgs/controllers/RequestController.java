@@ -23,15 +23,15 @@ public class RequestController {
      * Endpoint that creates a new request based on the provided request data for a
      * specific user.
      *
-     * @param solicitudDTO The request data.
-     * @param usuarioId    The ID of the user associated with the request.
+     * @param requestDTO The request data.
+     * @param userId    The ID of the user associated with the request.
      * @return A response indicating whether the request was created successfully.
      */
     @PostMapping("/create")
-    public Response createRequest(@RequestBody RequestDTO solicitudDTO, @RequestParam Integer usuarioId) {
+    public Response createRequest(@RequestBody RequestDTO requestDTO, @RequestParam Integer userId) {
         Response response = new Response();
 
-        RequestDTO newRequest = requestService.createRequest(solicitudDTO, usuarioId);
+        RequestDTO newRequest = requestService.createRequest(requestDTO, userId);
 
         if (newRequest != null)
             response.setMessage("Request created successful");
@@ -108,6 +108,32 @@ public class RequestController {
         return response;
     }
 
+    @PostMapping("/verify")
+    public Response verifyRequest(@RequestParam Integer requestId) {
+        Response response = new Response();
+        try {
+            requestService.changeRequestState(requestId, 2);
+            response.setMessage("Request verified succesfully");
+        } catch (IllegalArgumentException e) {
+            response.setMessage("Error verifying request : " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    @PostMapping("/reject")
+    public Response rejectRequest(@RequestParam Integer requestId) {
+         Response response = new Response();
+        try {
+            requestService.changeRequestState(requestId, 4);
+            response.setMessage("Request rejected succesfully");
+        } catch (IllegalArgumentException e) {
+            response.setMessage("Error rejecting request : " + e.getMessage());
+        }
+
+        return response;
+    }
+
     /**
      * Endpoint that cancels a request, changing its state to "CANCELLED".
      *
@@ -147,7 +173,8 @@ public class RequestController {
     }
 
     /**
-     * Endpoint that retrieves all requests associated with a specific dependence. Accessible by
+     * Endpoint that retrieves all requests associated with a specific dependence.
+     * Accessible by
      * users with the role "ROLE_JEFE."
      *
      * @param idDependence The ID of the dependence to retrieve requests for.
