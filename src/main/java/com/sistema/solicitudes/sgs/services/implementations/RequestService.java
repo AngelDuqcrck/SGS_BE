@@ -146,8 +146,8 @@ public class RequestService {
                 if (!request.getStatusRequest().getDescription().equals("VERIFIED")) {
                     if (!request.getStatusRequest().getDescription().equals("SENT")) {
                         throw new IllegalArgumentException(
-                            "You can't reject the request because it is neither VERIFIED nor SENT status.");
-                    }  
+                                "You can't reject the request because it is neither VERIFIED nor SENT status.");
+                    }
                 }
                 break;
 
@@ -166,15 +166,11 @@ public class RequestService {
                 break;
 
             default:
-            throw new IllegalArgumentException("Something is wrong with states");
-                
+                throw new IllegalArgumentException("Something is wrong with states");
+
         }
         request.setStatusRequest(newStatus);
         requestRepository.save(request);
-    }
-
-    public void checkStatus(Integer requestStateId) {
-
     }
 
     /**
@@ -246,4 +242,24 @@ public class RequestService {
                 }).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves all requests with the state "VERIFIED".
+     *
+     * @return A list of request DTOs with the "VERIFIED" status.
+     */
+    public List<RequestDTO> getAllVerifiedRequests() {
+        List<Request> verifiedRequests = requestRepository.findAll().stream()
+                .filter(request -> "VERIFIED".equals(request.getStatusRequest().getDescription()))
+                .collect(Collectors.toList());
+
+        return verifiedRequests.stream()
+                .map(request -> {
+                    RequestDTO requestDTO = new RequestDTO();
+                    BeanUtils.copyProperties(request, requestDTO);
+                    requestDTO.setUserId(request.getUser().getId());
+                    requestDTO.setStatusId(request.getStatusRequest().getId());
+                    return requestDTO;
+                })
+                .collect(Collectors.toList());
+    }
 }

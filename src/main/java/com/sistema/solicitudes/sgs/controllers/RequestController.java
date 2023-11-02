@@ -24,7 +24,7 @@ public class RequestController {
      * specific user.
      *
      * @param requestDTO The request data.
-     * @param userId    The ID of the user associated with the request.
+     * @param userId     The ID of the user associated with the request.
      * @return A response indicating whether the request was created successfully.
      */
     @PostMapping("/create")
@@ -108,6 +108,12 @@ public class RequestController {
         return response;
     }
 
+    /**
+     * Endpoint to verify a request, changing its state to "APPROVE".
+     *
+     * @param requestId The ID of the request to verify.
+     * @return A response indicating whether the request was verified successfully.
+     */
     @PostMapping("/verify")
     public Response verifyRequest(@RequestParam Integer requestId) {
         Response response = new Response();
@@ -121,9 +127,15 @@ public class RequestController {
         return response;
     }
 
+    /**
+     * Endpoint to reject a request, changing its state to "REJECT".
+     *
+     * @param requestId The ID of the request to reject.
+     * @return A response indicating whether the request was rejected successfully.
+     */
     @PostMapping("/reject")
     public Response rejectRequest(@RequestParam Integer requestId) {
-         Response response = new Response();
+        Response response = new Response();
         try {
             requestService.changeRequestState(requestId, 4);
             response.setMessage("Request rejected succesfully");
@@ -175,15 +187,25 @@ public class RequestController {
     /**
      * Endpoint that retrieves all requests associated with a specific dependence.
      * Accessible by
-     * users with the role "ROLE_JEFE."
+     * users with the role "ROLE_DEPENDENCE_BOSS"
      *
      * @param idDependence The ID of the dependence to retrieve requests for.
      * @return A list of requests associated with the specified dependence.
      */
-    @PreAuthorize("hasRole('ROLE_JEFE')")
+    @PreAuthorize("hasRole('ROLE_DEPENDENCE_BOSS')")
     @GetMapping("/allRequestPerDependence")
     public List<RequestDTO> getAllRequestPerDependence(@RequestParam Integer idDependence) {
         return requestService.getAllRequest(idDependence);
+    }
+
+    /*
+     * Endpoint that retrieves all request that is currently in VERIFIED status
+     * Accessible by
+     * users with the role "ROLE_SERVICE_BOSS."
+     */
+    @GetMapping("/verifiedRequest")
+    public List<RequestDTO> getAllVerifiedRequests() {
+        return requestService.getAllVerifiedRequests();
     }
 
 }
