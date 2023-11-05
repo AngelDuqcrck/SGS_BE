@@ -16,5 +16,6 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
      * @param userId that contains the id assigned to the user
      * @return an Request object containing the request if found, otherwise returns null 
      */
-    List<Request> findUserById(Integer userId);
+    List<Request> findByUserId(Integer userId);
+
 }

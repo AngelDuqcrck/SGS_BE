@@ -20,9 +20,9 @@ public class RequestDTO {
     private String description;
 
     private Date requestDate;
-    // Usamos el ID del estado en lugar de la referencia al objeto EstadoSolicitud
+    //We'll use the status id
     private Integer statusId;
-    // Usamos el ID del usuario en lugar de la referencia al objeto Usuario
+    // We'll use the user id
     private Integer userId;
 
 }

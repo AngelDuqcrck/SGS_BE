@@ -1,9 +1,11 @@
 package com.sistema.solicitudes.sgs.services.implementations;
 
 import com.sistema.solicitudes.sgs.entities.Request;
+import com.sistema.solicitudes.sgs.entities.StatusChangeRequest;
 import com.sistema.solicitudes.sgs.entities.StatusRequest;
 import com.sistema.solicitudes.sgs.entities.User;
 import com.sistema.solicitudes.sgs.repositories.RequestRepository;
+import com.sistema.solicitudes.sgs.repositories.StatusChageRequestRepository;
 import com.sistema.solicitudes.sgs.repositories.StatusRequestRepository;
 import com.sistema.solicitudes.sgs.repositories.UserRepository;
 import com.sistema.solicitudes.sgs.shared.dto.RequestDTO;
@@ -27,14 +29,16 @@ public class RequestService {
 
     @Autowired
     private StatusRequestRepository statusRequestRepository;
+    
+    @Autowired
+    private StatusChageRequestRepository statusChangeRequestRepository;
 
     /**
      * This method is responsible for creating a new request in the database.
      * It copies the properties from the provided request DTO to a new request
-     * entity,
-     * associates the request with the specified user, sets its status to
-     * "STAND_BY,"
-     * and saves it in the database.
+     * entity, associates the request with the specified user, sets its status to
+     * "STAND_BY," and saves it in the database. It also creates a status change
+     * record in the StatusChangeRequest table.
      *
      * @param requestDTO The request data to be created.
      * @param userId     The ID of the user creating the request.
@@ -64,10 +68,28 @@ public class RequestService {
 
         Request savedRequest = requestRepository.save(request);
 
+        // Create a status change record for the "STAND_BY" status
+        createStatusChange(savedRequest, status);
+
         RequestDTO createdRequest = new RequestDTO();
         BeanUtils.copyProperties(savedRequest, createdRequest);
 
         return createdRequest;
+    }
+
+    /**
+     * Creates a status change record in the StatusChangeRequest table.
+     *
+     * @param request The request for which the status change is recorded.
+     * @param status  The status to be recorded in the change.
+     */
+    private void createStatusChange(Request request, StatusRequest status) {
+        StatusChangeRequest statusChangeRequest = new StatusChangeRequest();
+        statusChangeRequest.setRequest(request);
+        statusChangeRequest.setStatusRequest(status);
+        statusChangeRequest.setChangeDate(new Date());
+
+        statusChangeRequestRepository.save(statusChangeRequest);
     }
 
     /**
@@ -78,7 +100,7 @@ public class RequestService {
      * @return A list of request DTOs.
      */
     public List<RequestDTO> listRequestPerEmployee(Integer userId) {
-        List<Request> requests = requestRepository.findUserById(userId);
+        List<Request> requests = requestRepository.findByUserId(userId);
 
         List<RequestDTO> requestDTOs = new ArrayList<>();
 

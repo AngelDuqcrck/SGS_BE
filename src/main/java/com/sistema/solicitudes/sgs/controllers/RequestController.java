@@ -31,12 +31,18 @@ public class RequestController {
     public Response createRequest(@RequestBody RequestDTO requestDTO, @RequestParam Integer userId) {
         Response response = new Response();
 
-        RequestDTO newRequest = requestService.createRequest(requestDTO, userId);
+        try {
+            RequestDTO newRequest = requestService.createRequest(requestDTO, userId);
 
-        if (newRequest != null)
-            response.setMessage("Request created successful");
-        else
-            response.setMessage("Unexpected error while request was created");
+            if (newRequest != null) {
+                response.setMessage("Request created successfully");
+            } else {
+                response.setMessage("Unexpected error while request was created");
+            }
+        } catch (IllegalArgumentException e) {
+            response.setMessage("Error: " + e.getMessage());
+        }
+
         return response;
     }
 
