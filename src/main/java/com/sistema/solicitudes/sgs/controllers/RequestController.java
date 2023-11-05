@@ -214,4 +214,17 @@ public class RequestController {
         return requestService.getAllVerifiedRequests();
     }
 
+
+     @PostMapping("/approve")
+    public Response approveRequest(@RequestParam Integer requestId) {
+        Response response = new Response();
+        try {
+            requestService.changeRequestState(requestId, 3);
+            response.setMessage("Request was approved successfully");
+        } catch (IllegalArgumentException e) {
+            response.setMessage("Error approving request : " + e.getMessage());
+        }
+
+        return response;
+    }
 }

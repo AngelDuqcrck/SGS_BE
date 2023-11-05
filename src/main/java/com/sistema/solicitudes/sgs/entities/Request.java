@@ -27,6 +27,9 @@ public class Request {
     @Column(name = "description", length = 255)
     private String description;
 
+    @Column(name = "feedback", length = 255 )
+    private String feedback;
+
     // This is the date when a request was created, here is exact time (hours,
     // minutes and seconds)
     @Column(name = "request_date")

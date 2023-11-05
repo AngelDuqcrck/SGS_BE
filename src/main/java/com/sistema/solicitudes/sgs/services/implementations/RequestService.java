@@ -9,6 +9,8 @@ import com.sistema.solicitudes.sgs.repositories.StatusChageRequestRepository;
 import com.sistema.solicitudes.sgs.repositories.StatusRequestRepository;
 import com.sistema.solicitudes.sgs.repositories.UserRepository;
 import com.sistema.solicitudes.sgs.shared.dto.RequestDTO;
+import com.sistema.solicitudes.sgs.shared.dto.RequestStatusChangesDTO;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class RequestService {
 
     @Autowired
     private StatusRequestRepository statusRequestRepository;
-    
+
     @Autowired
     private StatusChageRequestRepository statusChangeRequestRepository;
 
@@ -57,11 +59,8 @@ public class RequestService {
 
         request.setUser(user);
 
-        StatusRequest status = statusRequestRepository.findByDescription("STAND_BY").orElse(null);
-
-        if (status == null) {
-            throw new IllegalArgumentException("Status STAND_BY not found");
-        }
+        StatusRequest status = statusRequestRepository.findByDescription("STAND_BY")
+                .orElseThrow(() -> new IllegalArgumentException("Status Request not found"));
 
         request.setStatusRequest(status);
         request.setRequestDate(new Date());
@@ -116,21 +115,41 @@ public class RequestService {
     }
 
     /**
-     * This method fetches the details of a specific request by its ID
+     * This method fetches the details of a specific request by its ID, including
+     * its status change history.
      *
      * @param requestId The ID of the request to retrieve.
-     * @return The details of the request as a DTO.
+     * @return The details of the request as a DTO, including the status change
+     *         history.
      */
     public RequestDTO lookRequestDetails(Integer requestId) {
         RequestDTO requestDTO = new RequestDTO();
-        Request request = new Request();
-        request = requestRepository.findById(requestId).get();
-        BeanUtils.copyProperties(request, requestDTO);
-        requestDTO.setStatusId(request.getStatusRequest().getId());
-        requestDTO.setUserId(request.getUser().getId());
+
+        Request request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new IllegalArgumentException("Request not found"));
+
+        if (request != null) {
+            BeanUtils.copyProperties(request, requestDTO);
+            requestDTO.setStatusId(request.getStatusRequest().getId());
+            requestDTO.setUserId(request.getUser().getId());
+
+            List<StatusChangeRequest> statusChangeRequests = request.getStatusChanges();
+            List<RequestStatusChangesDTO> statusChangeDTOs = new ArrayList<>();
+
+            
+            for (StatusChangeRequest statusChange : statusChangeRequests) {
+                RequestStatusChangesDTO statusChangeDTO = new RequestStatusChangesDTO();
+                BeanUtils.copyProperties(statusChange, statusChangeDTO);
+                statusChangeDTO.setRequestId(statusChange.getRequest().getId());
+                statusChangeDTO.setStatusId(statusChange.getStatusRequest().getId());
+                statusChangeDTOs.add(statusChangeDTO);
+            }
+
+            // Set the status change history in the DTO
+            requestDTO.setStatusChanges(statusChangeDTOs);
+        }
 
         return requestDTO;
-
     }
 
     /**
@@ -192,6 +211,8 @@ public class RequestService {
 
         }
         request.setStatusRequest(newStatus);
+        // Create a status change record for the "STAND_BY" status
+        createStatusChange(request, newStatus);
         requestRepository.save(request);
     }
 

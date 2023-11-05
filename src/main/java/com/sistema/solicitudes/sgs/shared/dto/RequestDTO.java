@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
 
 @Data
 @Builder
@@ -24,5 +27,10 @@ public class RequestDTO {
     private Integer statusId;
     // We'll use the user id
     private Integer userId;
+
+    private String feedback;
+
+
+    private List<RequestStatusChangesDTO> statusChanges; 
 
 }
