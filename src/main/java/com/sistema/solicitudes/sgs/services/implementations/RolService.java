@@ -2,6 +2,7 @@ package com.sistema.solicitudes.sgs.services.implementations;
 
 import com.sistema.solicitudes.sgs.entities.Rol;
 import com.sistema.solicitudes.sgs.repositories.RolRepository;
+import com.sistema.solicitudes.sgs.services.interfaces.RolServiceInterface;
 import com.sistema.solicitudes.sgs.shared.dto.RolDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RolService {
+public class RolService implements RolServiceInterface{
 
     @Autowired
     private RolRepository rolRepository;
@@ -21,6 +22,7 @@ public class RolService {
      *
      * @return A list of role DTOs.
      */
+    @Override
     public List<RolDTO> listRoles() {
         List<Rol> roles = rolRepository.findAll();
         return roles.stream()
@@ -35,6 +37,7 @@ public class RolService {
      * @param rolDTO The role data with the updated description.
      * @return The updated role as a DTO, or null if the role is not found.
      */
+    @Override
     public RolDTO updateRol(Integer rolId, RolDTO rolDTO) {
         Rol rol = rolRepository.findById(rolId).orElse(null);
         if (rol == null) {
@@ -53,6 +56,7 @@ public class RolService {
      * @param rol The role entity to convert.
      * @return The role DTO.
      */
+   
     private RolDTO convertEntityToDTO(Rol rol) {
         RolDTO rolDTO = new RolDTO();
         BeanUtils.copyProperties(rol, rolDTO);

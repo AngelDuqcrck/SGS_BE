@@ -6,13 +6,14 @@ import com.sistema.solicitudes.sgs.entities.User;
 import com.sistema.solicitudes.sgs.repositories.DependenceRepository;
 import com.sistema.solicitudes.sgs.repositories.RolRepository;
 import com.sistema.solicitudes.sgs.repositories.UserRepository;
+import com.sistema.solicitudes.sgs.services.interfaces.UserServiceInterface;
 import com.sistema.solicitudes.sgs.shared.dto.UserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements UserServiceInterface{
 
     @Autowired
     private UserRepository userRepository;
@@ -33,6 +34,7 @@ public class UserService {
      * @throws IllegalArgumentException if the associated role or dependence is not
      *                                  found.
      */
+    @Override
     public UserDTO registerUsers(UserDTO userDTO) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);

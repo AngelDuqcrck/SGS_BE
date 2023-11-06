@@ -8,6 +8,7 @@ import com.sistema.solicitudes.sgs.repositories.RequestRepository;
 import com.sistema.solicitudes.sgs.repositories.StatusChageRequestRepository;
 import com.sistema.solicitudes.sgs.repositories.StatusRequestRepository;
 import com.sistema.solicitudes.sgs.repositories.UserRepository;
+import com.sistema.solicitudes.sgs.services.interfaces.RequestServiceInterface;
 import com.sistema.solicitudes.sgs.shared.dto.RequestDTO;
 import com.sistema.solicitudes.sgs.shared.dto.RequestStatusChangesDTO;
 
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RequestService {
+public class RequestService implements RequestServiceInterface {
 
     @Autowired
     private RequestRepository requestRepository;
@@ -48,6 +49,7 @@ public class RequestService {
      * @throws IllegalArgumentException if the user does not exist or if the
      *                                  "STAND_BY" status is not found.
      */
+    @Override
     public RequestDTO createRequest(RequestDTO requestDTO, Integer userId) {
         Request request = new Request();
 
@@ -98,6 +100,7 @@ public class RequestService {
      * @param userId The ID of the user to fetch requests for.
      * @return A list of request DTOs.
      */
+    @Override
     public List<RequestDTO> listRequestPerEmployee(Integer userId) {
         List<Request> requests = requestRepository.findByUserId(userId);
 
@@ -122,6 +125,7 @@ public class RequestService {
      * @return The details of the request as a DTO, including the status change
      *         history.
      */
+    @Override
     public RequestDTO lookRequestDetails(Integer requestId) {
         RequestDTO requestDTO = new RequestDTO();
 
@@ -159,6 +163,7 @@ public class RequestService {
      * @param newRequestStateId The ID of the new state for the request.
      * @throws IllegalArgumentException if the request is not found.
      */
+    @Override
     public void changeRequestState(Integer requestId, Integer newRequestStateId) {
 
         Request request = requestRepository.findById(requestId)
@@ -226,6 +231,7 @@ public class RequestService {
      * @throws IllegalArgumentException if the request is not found or if it's not
      *                                  in "STAND_BY" status.
      */
+    @Override
     public RequestDTO updateRequest(RequestDTO requestDTO, Integer requestId) {
 
         Request request = requestRepository.findById(requestId)
@@ -237,6 +243,7 @@ public class RequestService {
 
         request.setTitle(requestDTO.getTitle());
         request.setDescription(requestDTO.getDescription());
+        request.setRequestDate(new Date());
 
         Request updatedRequest = requestRepository.save(request);
 
@@ -253,6 +260,7 @@ public class RequestService {
      * @throws IllegalArgumentException if the request is not found or not in
      *                                  "STAND_BY" status.
      */
+    @Override
     public void deleteRequest(Integer requestId) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new IllegalArgumentException("Request not found"));
@@ -271,6 +279,7 @@ public class RequestService {
      * @param idDependence The ID of the dependence.
      * @return A list of request DTOs belonging to the specified dependence.
      */
+    @Override
     public List<RequestDTO> getAllRequest(Integer idDependence) {
         return requestRepository.findAll().stream().filter(
                 request -> request.getUser().getDependence().getId() == idDependence).map(request -> {
@@ -290,6 +299,7 @@ public class RequestService {
      *
      * @return A list of request DTOs with the "VERIFIED" status.
      */
+    @Override
     public List<RequestDTO> getAllVerifiedRequests() {
         List<Request> verifiedRequests = requestRepository.findAll().stream()
                 .filter(request -> "VERIFIED".equals(request.getStatusRequest().getDescription()))
