@@ -1,4 +1,4 @@
--- Crear la tabla roles si no existe
+-- Create role table if this isn't exist
 CREATE TABLE IF NOT EXISTS roles
 (
     id
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS roles
     PRIMARY KEY (id),
     UNIQUE KEY (description)
     );
--- Insertar roles por defecto en la tabla roles si aún no existen
+-- Insert default roles if these aren't exist
 INSERT
 IGNORE INTO roles (id,description) VALUES
     (1,"ROLE_SERVICE_BOSS"),
@@ -19,7 +19,7 @@ IGNORE INTO roles (id,description) VALUES
     (3,"ROLE_DEPENDENCE_BOSS"),
     (4,"ROLE_SERVICE_EMPLOYEE");
 
--- Crear la tabla dependencias si no existe
+-- Create dependence table if this isn't exist
 CREATE TABLE IF NOT EXISTS dependencies
 (
     id
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS dependencies
     UNIQUE KEY ( description )
     );
 
--- Insertar dependencias por defecto en la tabla dependencias si aún no existen
+-- Insert default dependences into the dependencies table if these isn't exist
 INSERT
 IGNORE INTO dependencies (id, description) VALUES
 (1,"MARKETING"),
@@ -42,7 +42,7 @@ IGNORE INTO dependencies (id, description) VALUES
 (4, "RRHH"),
 (5, "SERVICES");
 
--- Crear la tabla estadoSolicitudes si no existe
+-- Create table status request if this isn't exist
 CREATE TABLE IF NOT EXISTS status_request
 (
     id
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS status_request
     VARCHAR (50) NOT NULL
     );
 
--- Insertar algunos estados por defecto en estadoSolicitudes
+-- Insert some status request into the status request table if these aren't exist
 INSERT
 IGNORE INTO status_request (id, description) VALUES
     (1,"STAND_BY"),
@@ -64,7 +64,7 @@ IGNORE INTO status_request (id, description) VALUES
     (5,"SENT"),
     (6,"CANCELLED");
 
--- Crear la tabla estadoTickets si no existe
+-- Create status tickets table if this isn't exist
 CREATE TABLE IF NOT EXISTS status_tickets
 (
     id
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS status_tickets
     VARCHAR (50) NOT NULL
     );
 
--- Insertar algunos estados por defecto en estadoTickets
+-- Insert some status tickets if these aren't exist
 INSERT
 IGNORE INTO status_tickets (id, description) VALUES
     (1, "ASSIGNED"),
