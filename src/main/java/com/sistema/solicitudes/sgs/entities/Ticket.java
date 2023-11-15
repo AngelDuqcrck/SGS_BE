@@ -20,6 +20,10 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    //This is the ticket tittle
+    @Column(nullable = false, length = 100)
+    private String tittle;
+
     //This is all the information about a ticket
     @Column(nullable = false, length = 200)
     private String description;

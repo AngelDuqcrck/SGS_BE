@@ -9,6 +9,7 @@ public class SgsApplication {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SgsApplication.class, args);
+		
 	}
 
 }

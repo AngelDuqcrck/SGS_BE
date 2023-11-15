@@ -57,7 +57,7 @@ public class SecurityConfig {
                 })
                 .authorizeRequests(auth -> {
                     auth.antMatchers(PUBLIC_URL).permitAll(); //input all the endpoints its free por the user.
-                    auth.anyRequest().authenticated();
+                    //auth.anyRequest().authenticated();
                 })
                 .addFilter(jwtAuthenticationFilter)
                 .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)

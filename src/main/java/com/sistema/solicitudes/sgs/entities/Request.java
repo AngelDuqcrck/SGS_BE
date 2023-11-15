@@ -27,8 +27,8 @@ public class Request {
     @Column(name = "description", length = 255)
     private String description;
 
-    @Column(name = "feedback", length = 255 )
-    private String feedback;
+    // @Column(name = "feedback", length = 255 )
+    // private String feedback;
 
     // This is the date when a request was created, here is exact time (hours,
     // minutes and seconds)
@@ -51,4 +51,7 @@ public class Request {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(mappedBy = "request", cascade = CascadeType.ALL)
+    private Ticket ticket;
 }

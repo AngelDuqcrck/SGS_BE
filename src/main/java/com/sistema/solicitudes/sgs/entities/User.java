@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
@@ -38,5 +40,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "dependence_id")
     private Dependence dependence;
+
+    @OneToMany(mappedBy = "employee")
+    private List<Ticket> tickets;
 
 }

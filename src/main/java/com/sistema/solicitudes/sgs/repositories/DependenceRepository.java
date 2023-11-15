@@ -7,7 +7,10 @@ import org.springframework.stereotype.Repository;
  * Repository that define the methods to access to Dependence's data 
  */
 
+import java.util.Optional;
+
+
 @Repository
 public interface DependenceRepository extends JpaRepository<Dependence, Integer> {
-    
+    Optional<Dependence> findByDescription(String description);
 }

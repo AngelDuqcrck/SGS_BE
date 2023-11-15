@@ -16,7 +16,8 @@ public class TicketDTO {
 
     private Integer id;
 
-    @NotEmpty
+    private String tittle;
+
     private String description;
 
     private String observation;

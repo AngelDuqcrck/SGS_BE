@@ -28,7 +28,7 @@ public class RequestDTO {
     // We'll use the user id
     private Integer userId;
 
-    private String feedback;
+   // private String feedback;
 
 
     private List<RequestStatusChangesDTO> statusChanges; 
