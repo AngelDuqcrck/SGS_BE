@@ -1,22 +1,18 @@
 package com.sistema.solicitudes.sgs.entities;
-import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.Date;
 
 import javax.persistence.*;
 
-
+import lombok.*;
 
  @Entity
 @Data
- @AllArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "statusChangeRequests")
-public class StatusChangeRequest {
+@Table(name = "statusChangeTickets")
+public class StatusChangeTicket {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +20,12 @@ public class StatusChangeRequest {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "request_id")
-    private Request request;
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id")
-    private StatusRequest statusRequest;
+    private StatusTicket statusTicket;
 
     @Column(name = "change_date")
     @Temporal(TemporalType.TIMESTAMP)

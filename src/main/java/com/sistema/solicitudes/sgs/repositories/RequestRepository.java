@@ -18,6 +18,6 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
      */
     List<Request> findByUserId(Integer userId);
 
-    Request findByTicketId(Integer ticketId);
+
 
 }

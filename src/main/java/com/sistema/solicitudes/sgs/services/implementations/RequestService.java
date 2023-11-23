@@ -78,21 +78,7 @@ public class RequestService implements RequestServiceInterface {
         return createdRequest;
     }
 
-    /**
-     * Creates a status change record in the StatusChangeRequest table.
-     *
-     * @param request The request for which the status change is recorded.
-     * @param status  The status to be recorded in the change.
-     */
-    private void createStatusChange(Request request, StatusRequest status) {
-        StatusChangeRequest statusChangeRequest = new StatusChangeRequest();
-        statusChangeRequest.setRequest(request);
-        statusChangeRequest.setStatusRequest(status);
-        statusChangeRequest.setChangeDate(new Date());
-
-        statusChangeRequestRepository.save(statusChangeRequest);
-    }
-
+   
     /**
      * This method retrieves a list of requests associated with a specific user.
      * It fetches requests based on the user's ID
@@ -315,4 +301,21 @@ public class RequestService implements RequestServiceInterface {
                 })
                 .collect(Collectors.toList());
     }
+
+
+     /**
+     * Creates a status change record in the StatusChangeRequest table.
+     *
+     * @param request The request for which the status change is recorded.
+     * @param status  The status to be recorded in the change.
+     */
+    private void createStatusChange(Request request, StatusRequest status) {
+        StatusChangeRequest statusChangeRequest = new StatusChangeRequest();
+        statusChangeRequest.setRequest(request);
+        statusChangeRequest.setStatusRequest(status);
+        statusChangeRequest.setChangeDate(new Date());
+
+        statusChangeRequestRepository.save(statusChangeRequest);
+    }
+
 }

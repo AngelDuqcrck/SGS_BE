@@ -52,6 +52,6 @@ public class Request {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "request", cascade = CascadeType.ALL)
-    private Ticket ticket;
+    @OneToMany(mappedBy = "request", cascade = CascadeType.ALL)
+    private List<Ticket> tickets;
 }

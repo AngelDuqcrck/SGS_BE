@@ -82,3 +82,4 @@ IGNORE INTO status_tickets (id, description) VALUES
     (1, "ASSIGNED"),
     (2, "RUNNING"),
     (3, "FINISHED");
+
