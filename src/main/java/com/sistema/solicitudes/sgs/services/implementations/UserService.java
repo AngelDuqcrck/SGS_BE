@@ -40,15 +40,27 @@ public class UserService implements UserServiceInterface{
         BeanUtils.copyProperties(userDTO, user);
 
         Rol rol = rolRepository.findById(userDTO.getRolId()).orElse(null);
-        Dependence dependence = dependenceRepository.findById(userDTO.getDependenceId()).orElse(null);
+        Dependence defaultDependence = dependenceRepository.findByDescription("SERVICES").orElse(null);
 
         if (rol == null)
             throw new IllegalArgumentException("Rol not found");
-        if (dependence == null)
-            throw new IllegalArgumentException("Dependence not found");
+
+    
+        if (rol.getDescription().equals("ROLE_DEPENDENCE_BOSS") || rol.getDescription().equals("ROLE_SERVICE_EMPLOYEE")) {
+            if (defaultDependence == null) {
+                throw new IllegalArgumentException("Default dependence 'SERVICES' not found");
+            }
+            user.setDependence(defaultDependence);
+        } else {
+            
+            Dependence dependence = dependenceRepository.findById(userDTO.getDependenceId()).orElse(null);
+            if (dependence == null) {
+                throw new IllegalArgumentException("Dependence not found");
+            }
+            user.setDependence(dependence);
+        }
 
         user.setRol(rol);
-        user.setDependence(dependence);
         User savedUser = userRepository.save(user);
 
         UserDTO createdUserDTO = new UserDTO();

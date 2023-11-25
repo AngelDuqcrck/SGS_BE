@@ -6,11 +6,15 @@ import org.springframework.stereotype.Service;
 
 import com.sistema.solicitudes.sgs.entities.Request;
 import com.sistema.solicitudes.sgs.entities.Rol;
+import com.sistema.solicitudes.sgs.entities.StatusChangeRequest;
+import com.sistema.solicitudes.sgs.entities.StatusChangeTicket;
+import com.sistema.solicitudes.sgs.entities.StatusRequest;
 import com.sistema.solicitudes.sgs.entities.StatusTicket;
 import com.sistema.solicitudes.sgs.entities.Ticket;
 import com.sistema.solicitudes.sgs.entities.User;
 import com.sistema.solicitudes.sgs.repositories.RequestRepository;
 import com.sistema.solicitudes.sgs.repositories.RolRepository;
+import com.sistema.solicitudes.sgs.repositories.StatusChangeTicketRepository;
 import com.sistema.solicitudes.sgs.repositories.StatusTicketRepository;
 import com.sistema.solicitudes.sgs.repositories.TicketRepository;
 import com.sistema.solicitudes.sgs.repositories.UserRepository;
@@ -38,6 +42,9 @@ public class TicketService implements TicketServiceInterface {
     @Autowired
     private RolRepository rolRepository;
 
+    @Autowired
+    private StatusChangeTicketRepository statusChangeTicketRepository;
+
     @Override
     public TicketDTO createTicket(Integer requestId, TicketDTO ticketDTO) {
 
@@ -61,6 +68,8 @@ public class TicketService implements TicketServiceInterface {
                 .orElseThrow(() -> new IllegalArgumentException("Initial status not found"));
         ticket.setStatusTicket(initialStatus);
 
+        createStatusChange(ticket, initialStatus);
+
         Ticket savedTicket = ticketRepository.save(ticket);
 
         TicketDTO savedTicketDTO = new TicketDTO();
@@ -81,12 +90,91 @@ public class TicketService implements TicketServiceInterface {
     public TicketDTO lookTicketDetails(Integer ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new IllegalArgumentException("Ticket not Found"));
-        
+
         TicketDTO ticketDTO = new TicketDTO();
         BeanUtils.copyProperties(ticket, ticketDTO);
 
         return ticketDTO;
 
+    }
+
+    @Override
+    public TicketDTO updateTicket(Integer ticketId, TicketDTO ticketDTO) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new IllegalArgumentException("Ticket not Found"));
+
+        if (!ticket.getStatusTicket().getDescription().equals("ASSIGNED")) {
+            throw new IllegalArgumentException("You can't edit the ticket because it isn't in ASSIGNED status.");
+        }
+
+        ticket.setTittle(ticketDTO.getTittle());
+        ticket.setDescription(ticketDTO.getDescription());
+        ticket.setObservation(ticketDTO.getObservation());
+        ticket.setEndDate(ticketDTO.getEndDate());
+
+        User user = userRepository.findById(ticketDTO.getEmployeeId())
+                .orElseThrow(() -> new IllegalArgumentException("User not Found"));
+        ticket.setEmployee(user);
+
+        ticketRepository.save(ticket);
+        TicketDTO updatedTicketDTO = new TicketDTO();
+        BeanUtils.copyProperties(ticket, updatedTicketDTO);
+        return updatedTicketDTO;
+    }
+
+    @Override
+    public void ChangeTicketStatus(Integer ticketId, Integer newTicketStateId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new IllegalArgumentException("Ticket not Found"));
+
+        StatusTicket statusTicket = statusTicketRepository.findById(newTicketStateId)
+                .orElseThrow(() -> new IllegalArgumentException("Status Request not found"));
+
+        switch (newTicketStateId) {
+            case 3:
+                if(!ticket.getStatusTicket().getDescription().equals("RUNNING")){
+                    throw new IllegalArgumentException("Youc can't finish the ticket because, this isn't in RUNNING status");
+                }
+                break;
+            
+            case 4:
+                if(ticket.getStatusTicket().getDescription().equals("FINISHED")|| ticket.getStatusTicket().getDescription().equals("CANCELLED")){
+                    throw new IllegalArgumentException("Youc can't cancel the ticket because, this is in FINISHED OR RUNNING status");
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Something is wrong with states");
+        }
+        ticket.setStatusTicket(statusTicket);
+        createStatusChange(ticket, statusTicket);
+        ticketRepository.save(ticket);
+
+    }
+
+    @Override
+    public TicketDTO registerObservations(Integer ticketId, String observation){
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new IllegalArgumentException("Ticket not Found"));
+        
+        ticket.setObservation(observation);
+
+        Ticket ticketWithObservation = ticketRepository.save(ticket);
+        TicketDTO ticketDTO = new TicketDTO();
+        BeanUtils.copyProperties(ticketWithObservation, ticketDTO);
+        return ticketDTO;
+    }
+
+    @Override
+    public List<TicketDTO> listTicketsAssignedToEmployee(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not Found"));
+
+        List<Ticket> tickets = ticketRepository.findByEmployee(user);
+
+        return tickets.stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
     }
 
     // -----------------------class methods----------------------------------
@@ -121,14 +209,26 @@ public class TicketService implements TicketServiceInterface {
             throw new IllegalArgumentException("End date must be after start date.");
         }
 
-        if (ticketDTO.getStartDate() != null && currentDate.after(ticketDTO.getStartDate())) {
-            ticketDTO.setStatusId(statusTicketRepository.findByDescription("RUNNING")
-                    .orElseThrow(() -> new IllegalArgumentException("Status not found")).getId());
-        }
+        // if (ticketDTO.getStartDate() != null && currentDate.after(ticketDTO.getStartDate())) {
+        //     ticketDTO.setStatusId(statusTicketRepository.findByDescription("RUNNING")
+        //             .orElseThrow(() -> new IllegalArgumentException("Status not found")).getId());
 
-        if (ticketDTO.getEndDate() != null && currentDate.after(ticketDTO.getEndDate())) {
-            ticketDTO.setStatusId(statusTicketRepository.findByDescription("FINISHED")
-                    .orElseThrow(() -> new IllegalArgumentException("Status not found")).getId());
-        }
+        // }
+
+        // if (ticketDTO.getEndDate() != null && currentDate.after(ticketDTO.getEndDate())) {
+        //     ticketDTO.setStatusId(statusTicketRepository.findByDescription("FINISHED")
+        //             .orElseThrow(() -> new IllegalArgumentException("Status not found")).getId());
+        // }
     }
+
+    private void createStatusChange(Ticket ticket, StatusTicket statusTicket) {
+        StatusChangeTicket statusChangeTicket = new StatusChangeTicket();
+        statusChangeTicket.setTicket(ticket);
+        statusChangeTicket.setStatusTicket(statusTicket);
+        statusChangeTicket.setChangeDate(new Date());
+
+        statusChangeTicketRepository.save(statusChangeTicket);
+
+    }
+
 }

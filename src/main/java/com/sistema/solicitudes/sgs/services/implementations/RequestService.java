@@ -69,7 +69,6 @@ public class RequestService implements RequestServiceInterface {
 
         Request savedRequest = requestRepository.save(request);
 
-        // Create a status change record for the "STAND_BY" status
         createStatusChange(savedRequest, status);
 
         RequestDTO createdRequest = new RequestDTO();

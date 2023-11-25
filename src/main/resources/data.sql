@@ -81,5 +81,6 @@ INSERT
 IGNORE INTO status_tickets (id, description) VALUES
     (1, "ASSIGNED"),
     (2, "RUNNING"),
-    (3, "FINISHED");
+    (3, "FINISHED"),
+    (4, "CANCELLED");
 
