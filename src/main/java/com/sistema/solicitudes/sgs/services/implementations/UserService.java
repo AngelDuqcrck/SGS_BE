@@ -68,4 +68,19 @@ public class UserService implements UserServiceInterface{
 
         return createdUserDTO;
     }
+
+    @Override
+    public UserDTO findUser(String email) {
+        User userRes = userRepository.findByEmail(email).get();
+        UserDTO user = new UserDTO().builder()
+                .id(userRes.getId())
+                .email(userRes.getEmail())
+                .firstName(userRes.getFirstName())
+                .lastName(userRes.getLastName())
+                .dependence(userRes.getDependence().getDescription())
+                .password(null)
+                .rol(userRes.getRol().getDescription())
+                .build();
+        return user;
+    }
 }

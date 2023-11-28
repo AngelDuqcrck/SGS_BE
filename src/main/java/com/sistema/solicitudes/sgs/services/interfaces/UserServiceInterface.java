@@ -5,4 +5,7 @@ import com.sistema.solicitudes.sgs.shared.dto.UserDTO;
 public interface UserServiceInterface {
     
     public UserDTO registerUsers(UserDTO userDTO);
+
+    public UserDTO findUser(String email);
+
 }

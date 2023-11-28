@@ -4,10 +4,7 @@ import com.sistema.solicitudes.sgs.models.responses.Response;
 import com.sistema.solicitudes.sgs.services.implementations.UserService;
 import com.sistema.solicitudes.sgs.shared.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -34,5 +31,10 @@ public class UserController {
             message.setMessage("Unexpected error while user was created");
 
         return message;
+    }
+
+    @GetMapping("user/{email}")
+    public UserDTO getUser(@PathVariable String email){
+        return userService.findUser(email);
     }
 }

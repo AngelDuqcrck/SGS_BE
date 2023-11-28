@@ -26,9 +26,12 @@ public class UserDTO {
     private String password;
 
     // We'll use the rol id
+    private String rol;
+
     private Integer rolId;
 
     // We'll use the dependence id
+    private String dependence;
     private Integer dependenceId;
 
 }
