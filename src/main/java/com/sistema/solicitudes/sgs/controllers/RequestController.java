@@ -6,6 +6,7 @@ import com.sistema.solicitudes.sgs.services.implementations.RequestService;
 import com.sistema.solicitudes.sgs.shared.dto.RequestDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,22 +29,11 @@ public class RequestController {
      * @return A response indicating whether the request was created successfully.
      */
     @PostMapping("/create")
-    public Response createRequest(@RequestBody RequestDTO requestDTO, @RequestParam Integer userId) {
-        Response response = new Response();
+    public ResponseEntity<RequestDTO> createRequest(@RequestBody RequestDTO requestDTO, @RequestParam Integer userId) {
 
-        try {
-            RequestDTO newRequest = requestService.createRequest(requestDTO, userId);
+        RequestDTO newRequest = requestService.createRequest(requestDTO, userId);
 
-            if (newRequest != null) {
-                response.setMessage("Request created successfully");
-            } else {
-                response.setMessage("Unexpected error while request was created");
-            }
-        } catch (IllegalArgumentException e) {
-            response.setMessage("Error: " + e.getMessage());
-        }
-
-        return response;
+        return ResponseEntity.ok(newRequest);
     }
 
     /**
@@ -139,7 +129,7 @@ public class RequestController {
      * @param requestId The ID of the request to reject.
      * @return A response indicating whether the request was rejected successfully.
      */
-    
+
     @PostMapping("/reject")
     public Response rejectRequest(@RequestParam Integer requestId) {
         Response response = new Response();
@@ -216,7 +206,7 @@ public class RequestController {
     }
 
 
-     @PostMapping("/approve")
+    @PostMapping("/approve")
     public Response approveRequest(@RequestParam Integer requestId) {
         Response response = new Response();
         try {
