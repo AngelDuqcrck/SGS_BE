@@ -267,7 +267,7 @@ public class RequestService implements RequestServiceInterface {
     @Override
     public List<RequestDTO> getAllRequest(Integer idDependence) {
         return requestRepository.findAll().stream().filter(
-                request -> request.getUser().getDependence().getId() == idDependence).map(request -> {
+                request -> request.getUser().getDependence().getId() == idDependence && request.getStatusRequest().getId() == 5).map(request -> {
                     return new RequestDTO().builder()
                             .id(request.getId())
                             .title(request.getTitle())

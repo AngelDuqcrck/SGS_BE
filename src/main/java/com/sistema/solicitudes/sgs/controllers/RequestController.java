@@ -189,7 +189,7 @@ public class RequestController {
      * @param idDependence The ID of the dependence to retrieve requests for.
      * @return A list of requests associated with the specified dependence.
      */
-    @PreAuthorize("hasRole('ROLE_DEPENDENCE_BOSS')")
+//    @PreAuthorize("hasRole('ROLE_DEPENDENCE_BOSS')")
     @GetMapping("/allRequestPerDependence")
     public List<RequestDTO> getAllRequestPerDependence(@RequestParam Integer idDependence) {
         return requestService.getAllRequest(idDependence);
