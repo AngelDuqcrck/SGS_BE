@@ -46,7 +46,7 @@ public class UserService implements UserServiceInterface{
             throw new IllegalArgumentException("Rol not found");
 
     
-        if (rol.getDescription().equals("ROLE_DEPENDENCE_BOSS") || rol.getDescription().equals("ROLE_SERVICE_EMPLOYEE")) {
+        if (rol.getDescription().equals("ROLE_SERVICE_BOSS") || rol.getDescription().equals("ROLE_SERVICE_EMPLOYEE")) {
             if (defaultDependence == null) {
                 throw new IllegalArgumentException("Default dependence 'SERVICES' not found");
             }
@@ -80,6 +80,7 @@ public class UserService implements UserServiceInterface{
                 .dependence(userRes.getDependence().getDescription())
                 .password(null)
                 .rol(userRes.getRol().getDescription())
+                .dependenceId(userRes.getDependence().getId())
                 .build();
         return user;
     }
