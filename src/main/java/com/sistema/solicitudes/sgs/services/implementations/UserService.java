@@ -12,6 +12,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserServiceInterface{
 
@@ -23,6 +25,21 @@ public class UserService implements UserServiceInterface{
 
     @Autowired
     private DependenceRepository dependenceRepository;
+
+    @Override
+    public List<UserDTO> getUsers() {
+
+        return  userRepository.findAll().stream().map(user -> {
+            UserDTO userDTO = new UserDTO();
+            BeanUtils.copyProperties(user, userDTO);
+            userDTO.setRol(user.getRol().getDescription());
+            userDTO.setRolId(user.getRol().getId());
+            userDTO.setDependence(user.getDependence().getDescription());
+            userDTO.setDependenceId(user.getDependence().getId());
+            userDTO.setPassword(null);
+            return userDTO;
+        }).toList();
+    }
 
     /**
      * Registers a new user based on the provided user data. It associates the user

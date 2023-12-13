@@ -6,6 +6,8 @@ import com.sistema.solicitudes.sgs.shared.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -36,5 +38,10 @@ public class UserController {
     @GetMapping("user/{email}")
     public UserDTO getUser(@PathVariable String email){
         return userService.findUser(email);
+    }
+
+    @GetMapping
+    public List<UserDTO> getUsers(){
+        return userService.getUsers();
     }
 }
