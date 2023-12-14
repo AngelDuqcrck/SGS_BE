@@ -23,6 +23,7 @@ public class UserController {
      */
     @PostMapping
     public Response registerUser(@RequestBody UserDTO userDTO) {
+        System.out.println(userDTO);
         Response message = new Response();
 
         UserDTO createdUser = userService.registerUsers(userDTO);
@@ -33,6 +34,12 @@ public class UserController {
             message.setMessage("Unexpected error while user was created");
 
         return message;
+    }
+
+    @PatchMapping("update")
+    public void updateUser(@RequestBody UserDTO userDTO){
+        System.out.println(userDTO);
+        userService.updateUser(userDTO);
     }
 
     @GetMapping("user/{email}")

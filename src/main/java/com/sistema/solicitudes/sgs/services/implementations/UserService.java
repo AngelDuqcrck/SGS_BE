@@ -101,4 +101,12 @@ public class UserService implements UserServiceInterface{
                 .build();
         return user;
     }
+
+    public void updateUser(UserDTO userDTO){
+        User user = new User();
+        BeanUtils.copyProperties(userDTO, user);
+        user.setDependence(dependenceRepository.findById(userDTO.getDependenceId()).get());
+        user.setRol(rolRepository.findById(userDTO.getRolId()).get());
+        userRepository.save(user);
+    }
 }
