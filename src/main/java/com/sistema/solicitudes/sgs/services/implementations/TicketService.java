@@ -68,11 +68,12 @@ public class TicketService implements TicketServiceInterface {
                 .orElseThrow(() -> new IllegalArgumentException("Initial status not found"));
         ticket.setStatusTicket(initialStatus);
 
-        createStatusChange(ticket, initialStatus);
 
         Ticket savedTicket = ticketRepository.save(ticket);
-
+        createStatusChange(ticket, initialStatus);
         TicketDTO savedTicketDTO = new TicketDTO();
+        savedTicketDTO.setEmployeeId(savedTicket.getEmployee().getId());
+        savedTicketDTO.setStatusId(savedTicket.getStatusTicket().getId());
         BeanUtils.copyProperties(savedTicket, savedTicketDTO);
         return savedTicketDTO;
     }
@@ -181,6 +182,8 @@ public class TicketService implements TicketServiceInterface {
 
     private TicketDTO convertEntityToDTO(Ticket ticket) {
         TicketDTO ticketDTO = new TicketDTO();
+        ticketDTO.setStatusId(ticket.getStatusTicket().getId());
+        ticketDTO.setEmployeeId(ticket.getEmployee().getId());
         BeanUtils.copyProperties(ticket, ticketDTO);
         return ticketDTO;
     }
@@ -209,16 +212,7 @@ public class TicketService implements TicketServiceInterface {
             throw new IllegalArgumentException("End date must be after start date.");
         }
 
-        // if (ticketDTO.getStartDate() != null && currentDate.after(ticketDTO.getStartDate())) {
-        //     ticketDTO.setStatusId(statusTicketRepository.findByDescription("RUNNING")
-        //             .orElseThrow(() -> new IllegalArgumentException("Status not found")).getId());
-
-        // }
-
-        // if (ticketDTO.getEndDate() != null && currentDate.after(ticketDTO.getEndDate())) {
-        //     ticketDTO.setStatusId(statusTicketRepository.findByDescription("FINISHED")
-        //             .orElseThrow(() -> new IllegalArgumentException("Status not found")).getId());
-        // }
+        
     }
 
     private void createStatusChange(Ticket ticket, StatusTicket statusTicket) {
@@ -230,5 +224,7 @@ public class TicketService implements TicketServiceInterface {
         statusChangeTicketRepository.save(statusChangeTicket);
 
     }
+
+    
 
 }
