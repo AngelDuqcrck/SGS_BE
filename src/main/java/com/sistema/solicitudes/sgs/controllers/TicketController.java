@@ -24,7 +24,6 @@ public class TicketController {
      @PostMapping("/create")
     public Response createTicket(@RequestBody TicketDTO ticketDTO, @RequestParam Integer requestId) {
         Response response = new Response();
-         System.out.println("TicketDTO: " + ticketDTO);
         try {
             TicketDTO newTicket = ticketService.createTicket(requestId, ticketDTO);
 
