@@ -11,6 +11,7 @@ import com.sistema.solicitudes.sgs.shared.dto.UserDTO;
 import com.sistema.solicitudes.sgs.shared.dto.UserServiceEmployeeDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public class UserService implements UserServiceInterface{
 
     @Autowired
     private DependenceRepository dependenceRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> getUsers() {
@@ -79,6 +83,7 @@ public class UserService implements UserServiceInterface{
         }
 
         user.setRol(rol);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User savedUser = userRepository.save(user);
 
         UserDTO createdUserDTO = new UserDTO();
