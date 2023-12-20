@@ -22,21 +22,8 @@ public class TicketController {
     private TicketService ticketService;
 
      @PostMapping("/create")
-    public Response createTicket(@RequestBody TicketDTO ticketDTO, @RequestParam Integer requestId) {
-        Response response = new Response();
-        try {
-            TicketDTO newTicket = ticketService.createTicket(requestId, ticketDTO);
-
-            if (newTicket != null) {
-                response.setMessage("Ticket created successfully");
-            } else {
-                response.setMessage("Unexpected error while ticket was created");
-            }
-        } catch (IllegalArgumentException e) {
-            response.setMessage("Error: " + e.getMessage());
-        }
-
-        return response;
+    public TicketDTO createTicket(@RequestBody TicketDTO ticketDTO, @RequestParam Integer requestId) {
+       return ticketService.createTicket(requestId, ticketDTO);
     }
 
      @GetMapping("/all")

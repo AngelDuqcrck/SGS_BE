@@ -148,8 +148,8 @@ public class TicketService implements TicketServiceInterface {
                 throw new IllegalArgumentException("Something is wrong with states");
         }
         ticket.setStatusTicket(statusTicket);
-        createStatusChange(ticket, statusTicket);
         ticketRepository.save(ticket);
+        createStatusChange(ticket, statusTicket);
 
     }
 
