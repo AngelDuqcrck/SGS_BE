@@ -218,4 +218,9 @@ public class RequestController {
 
         return response;
     }
+
+    @GetMapping("approvedRequests")
+    public List<RequestDTO> getAllApprovedRequests() {
+        return requestService.getAllRequest().stream().filter(request -> request.getStatusId() == 3).toList();
+    }
 }

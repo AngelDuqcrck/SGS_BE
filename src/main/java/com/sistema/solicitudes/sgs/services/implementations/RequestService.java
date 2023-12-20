@@ -317,4 +317,17 @@ public class RequestService implements RequestServiceInterface {
         statusChangeRequestRepository.save(statusChangeRequest);
     }
 
+    public List<RequestDTO> getAllRequest() {
+        return requestRepository.findAll().stream().map(request -> {
+            return new RequestDTO().builder()
+                    .id(request.getId())
+                    .title(request.getTitle())
+                    .description(request.getDescription())
+                    .requestDate(request.getRequestDate())
+                    .statusId(request.getStatusRequest().getId())
+                    .userId(request.getUser().getId())
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
 }

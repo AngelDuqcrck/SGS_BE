@@ -8,6 +8,7 @@ import com.sistema.solicitudes.sgs.repositories.RolRepository;
 import com.sistema.solicitudes.sgs.repositories.UserRepository;
 import com.sistema.solicitudes.sgs.services.interfaces.UserServiceInterface;
 import com.sistema.solicitudes.sgs.shared.dto.UserDTO;
+import com.sistema.solicitudes.sgs.shared.dto.UserServiceEmployeeDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,5 +109,15 @@ public class UserService implements UserServiceInterface{
         user.setDependence(dependenceRepository.findById(userDTO.getDependenceId()).get());
         user.setRol(rolRepository.findById(userDTO.getRolId()).get());
         userRepository.save(user);
+    }
+
+    public List<UserServiceEmployeeDTO> getAllUserServiceEmployees(){
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRol().getId() == 4)
+                .map(user -> {
+                        UserServiceEmployeeDTO userServiceEmployeeDTO = new UserServiceEmployeeDTO();
+                        BeanUtils.copyProperties(user, userServiceEmployeeDTO);
+                        return userServiceEmployeeDTO;
+                }).toList();
     }
 }

@@ -24,7 +24,7 @@ public class TicketController {
      @PostMapping("/create")
     public Response createTicket(@RequestBody TicketDTO ticketDTO, @RequestParam Integer requestId) {
         Response response = new Response();
-
+         System.out.println("TicketDTO: " + ticketDTO);
         try {
             TicketDTO newTicket = ticketService.createTicket(requestId, ticketDTO);
 
@@ -51,10 +51,10 @@ public class TicketController {
     }
 
     @PostMapping("/update")
-    public Response updateTicket(@RequestParam Integer ticketId, @RequestBody TicketDTO ticketDTO) {
+    public Response updateTicket(@RequestBody TicketDTO ticketDTO) {
         Response response = new Response();
         try {
-            ticketService.updateTicket(ticketId, ticketDTO);
+            ticketService.updateTicket(ticketDTO.getId(), ticketDTO);
             response.setMessage("Ticket updated successfully");
         } catch (IllegalArgumentException e) {
             response.setMessage("Error updating ticket: " + e.getMessage());

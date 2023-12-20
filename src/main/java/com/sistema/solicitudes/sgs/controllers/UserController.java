@@ -3,6 +3,7 @@ package com.sistema.solicitudes.sgs.controllers;
 import com.sistema.solicitudes.sgs.models.responses.Response;
 import com.sistema.solicitudes.sgs.services.implementations.UserService;
 import com.sistema.solicitudes.sgs.shared.dto.UserDTO;
+import com.sistema.solicitudes.sgs.shared.dto.UserServiceEmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,6 @@ public class UserController {
 
     @PatchMapping("update")
     public void updateUser(@RequestBody UserDTO userDTO){
-        System.out.println(userDTO);
         userService.updateUser(userDTO);
     }
 
@@ -50,5 +50,10 @@ public class UserController {
     @GetMapping
     public List<UserDTO> getUsers(){
         return userService.getUsers();
+    }
+
+    @GetMapping("service-employee")
+    public List<UserServiceEmployeeDTO> getAllServiceEmployee(){
+        return userService.getAllUserServiceEmployees();
     }
 }

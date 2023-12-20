@@ -34,12 +34,10 @@ public class Ticket {
 
     //Here, we save the date when a ticket was created/opened
     @Column(name = "start_date")
-    @Temporal(TemporalType.DATE)
     private Date startDate;
 
     //Here, we save the date when a ticket was closed/finished
     @Column(name = "end_date")
-    @Temporal(TemporalType.TIME)
     private Date endDate;
 
     //Here we save the id to identify the employee who have to solve the problem whereby the request was made
