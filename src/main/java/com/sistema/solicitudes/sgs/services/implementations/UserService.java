@@ -9,6 +9,7 @@ import com.sistema.solicitudes.sgs.repositories.UserRepository;
 import com.sistema.solicitudes.sgs.services.interfaces.UserServiceInterface;
 import com.sistema.solicitudes.sgs.shared.dto.UserDTO;
 import com.sistema.solicitudes.sgs.shared.dto.UserServiceEmployeeDTO;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -110,9 +111,21 @@ public class UserService implements UserServiceInterface{
 
     public void updateUser(UserDTO userDTO){
         User user = new User();
+        System.out.println(userDTO);
         BeanUtils.copyProperties(userDTO, user);
         user.setDependence(dependenceRepository.findById(userDTO.getDependenceId()).get());
         user.setRol(rolRepository.findById(userDTO.getRolId()).get());
+
+        if(userDTO.getPassword() != null && !userDTO.getPassword().isBlank() &&  !userDTO.getPassword().isEmpty() ){
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            System.out.println("contrasenia update");
+        }
+        else{
+            user.setPassword(userRepository.findById(userDTO.getId()).get().getPassword());
+            System.out.println("contrasenia no update");
+        }
+            
+
         userRepository.save(user);
     }
 
